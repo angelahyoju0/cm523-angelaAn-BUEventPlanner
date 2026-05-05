@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Documentation — BU Event Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Gaegu:wght@400;700&family=Mulish:wght@400;600;700&family=Ovo&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:      #fffaf2;
+      --paper-card: #fffdf8;
+      --paper-warm: #f8efe3;
+      --ink:        #4a382b;
+      --ink-mid:    #806f65;
+      --scarlet:    #c81d1d;
+      --sage:       #8aae8c;
+      --sage-dark:  #547f58;
+      --rose:       #e6b7bc;
+      --gold:       #d7b75f;
+      --blue:       #6B9FD4;
+      --border:     #d9cdbf;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Mulish', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 52px 40px 60px;
+    }
+
+    /* ── Masthead ── */
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 3px solid var(--scarlet);
+      padding-bottom: 16px;
+      margin-bottom: 40px;
+    }
+    .masthead-title {
+      font-family: 'Ovo', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .masthead-title em {
+      font-family: 'Caveat', cursive;
+      font-style: normal;
+      color: var(--scarlet);
+    }
+    .masthead-meta {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    /* ── Section ── */
+    .section { margin-bottom: 36px; }
+    .section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 5px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Color grid ── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+    .swatch {
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+    }
+    .swatch-chip { height: 44px; }
+    .swatch-info { padding: 7px 8px 8px; background: var(--paper-card); }
+    .swatch-name { font-weight: 700; font-size: 11px; color: var(--ink); line-height: 1.2; }
+    .swatch-hex  { font-size: 10px; color: var(--ink-mid); margin-top: 1px; }
+    .swatch-use  { font-size: 9.5px; color: var(--ink-mid); margin-top: 4px; line-height: 1.4; }
+
+    /* ── Type table ── */
+    .type-table { width: 100%; border-collapse: collapse; }
+    .type-table th {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--ink-mid); text-align: left; padding: 0 10px 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .type-table td {
+      padding: 10px 10px 10px 0; border-bottom: 1px solid var(--border);
+      vertical-align: middle; font-size: 12px;
+    }
+    .type-table tr:last-child td { border-bottom: none; }
+    .type-sample { font-size: 18px; color: var(--ink); line-height: 1.1; }
+
+    /* ── Component rows ── */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .comp-card {
+      background: var(--paper-card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .comp-name {
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .comp-desc {
+      font-size: 11.5px;
+      color: var(--ink-mid);
+      line-height: 1.6;
+    }
+    .comp-preview {
+      margin: 10px 0 8px;
+      padding: 10px 12px;
+      background: var(--paper-warm);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    /* Live previews */
+    .btn-sage {
+      display: inline-block; padding: 8px 20px;
+      background: var(--sage); border-radius: 100px;
+      color: #fff; font-family: 'Gaegu', cursive; font-size: 16px; font-weight: 700;
+    }
+    .btn-outline {
+      display: inline-block; padding: 7px 16px;
+      border: 1.5px solid var(--border); border-radius: 100px;
+      color: var(--ink-mid); font-family: 'Gaegu', cursive; font-size: 15px;
+    }
+    .btn-scarlet-outline {
+      display: inline-block; padding: 7px 16px;
+      border: 1.5px solid rgba(200,29,29,.3); border-radius: 100px;
+      color: var(--scarlet); font-family: 'Gaegu', cursive; font-size: 15px;
+      background: rgba(200,29,29,.06);
+    }
+
+    .bubble-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 8px; }
+    .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; }
+    .av-bot { background: #f0ebe3; border: 1.5px solid var(--border); }
+    .av-usr { background: rgba(122,158,126,.12); border: 1.5px solid rgba(122,158,126,.35); font-size: 8px; font-weight: 700; color: var(--sage-dark); }
+    .bub { padding: 7px 11px; font-family: 'Gaegu', cursive; font-size: 15px; line-height: 1.4; max-width: 78%; }
+    .bub-bot { background: var(--paper-card); border: 1.5px solid var(--border); border-radius: 14px 14px 14px 3px; }
+    .bub-usr { background: var(--sage); color: #fff; border-radius: 14px 14px 3px 14px; }
+
+    .mini-card { background: var(--paper-card); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .mini-card-top {
+      padding: 7px 12px; display: flex; justify-content: space-between;
+      background: linear-gradient(90deg, rgba(138,174,140,.14), rgba(230,183,188,.08));
+      border-bottom: 1px solid var(--border); position: relative;
+    }
+    .mini-card-top::before { content: ''; position: absolute; left:0; top:0; bottom:0; width: 3px; background: var(--scarlet); }
+    .mini-card-wk { font-family: 'Caveat', cursive; font-size: 16px; font-weight: 700; color: var(--ink); }
+    .mini-task { display: flex; gap: 8px; align-items: center; padding: 7px 12px; }
+    .mini-cb { width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid var(--border); flex-shrink: 0; }
+    .mini-cb.done { background: var(--sage); border-color: var(--sage); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; }
+    .mini-title { font-family: 'Gaegu', cursive; font-size: 15px; color: var(--ink); }
+    .mini-title.done { color: rgba(74,56,43,.4); text-decoration: line-through; }
+
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 100px; }
+    .tag-ev  { background: rgba(204,0,0,.08);    color: #AA0000; }
+    .tag-cat { background: rgba(201,164,81,.12);  color: #7A5C00; }
+    .tag-pur { background: rgba(122,158,126,.14); color: #547f58; }
+    .tag-com { background: rgba(107,159,212,.13); color: #1A5080; }
+
+    .urg-row { display: flex; flex-direction: column; gap: 5px; }
+    .urg-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--ink-mid); }
+    .urg-stripe { width: 3px; height: 18px; border-radius: 2px; }
+
+    .prog-wrap { display: flex; gap: 12px; align-items: center; }
+    .prog-num { font-family: 'Ovo', serif; font-size: 24px; font-weight: 700; color: var(--ink); }
+    .prog-track { flex: 1; height: 5px; background: #efe2d2; border-radius: 3px; overflow: hidden; }
+    .prog-fill { height: 100%; width: 60%; background: linear-gradient(90deg, var(--sage), #9dc4a0); border-radius: 3px; }
+
+    .stars { display: flex; gap: 3px; }
+    .star { font-size: 20px; }
+    .star.lit { color: var(--gold); }
+    .star.unlit { color: var(--border); }
+
+    .nav-demo { display: flex; gap: 4px; justify-content: center; padding: 8px; background: var(--paper); border: 1px solid var(--border); border-radius: 10px; }
+    .nav-link { font-family: 'Caveat', cursive; font-size: 16px; padding: 3px 12px; border-radius: 100px; color: var(--ink); }
+    .nav-link.active { color: var(--scarlet); background: rgba(200,29,29,.07); }
+
+    /* ── Print ── */
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      @page { size: letter; margin: 0.45in; }
+      body { background: #fffaf2 !important; }
+      .page { padding: 0; }
+      .comp-card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <div class="masthead-title">BU <em>Event Planner</em></div>
+    <div class="masthead-meta">Design Documentation<br>Angela An · COM '26<br>CM 523 — Design and Interactive Experiences</div>
+  </div>
+
+  <!-- 1. Colors -->
+  <div class="section">
+    <div class="section-title">Color Palette</div>
+    <div class="color-grid">
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#fffaf2; border-bottom:1px solid #e8e0d4;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Paper</div>
+          <div class="swatch-hex">#fffaf2</div>
+          <div class="swatch-use">Page background</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#f8efe3;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Paper Warm</div>
+          <div class="swatch-hex">#f8efe3</div>
+          <div class="swatch-use">Cards, forms, notes</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#4a382b;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Ink</div>
+          <div class="swatch-hex">#4a382b</div>
+          <div class="swatch-use">Primary text</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#806f65;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Ink Mid</div>
+          <div class="swatch-hex">#806f65</div>
+          <div class="swatch-use">Labels, metadata</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#c81d1d;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Scarlet</div>
+          <div class="swatch-hex">#c81d1d</div>
+          <div class="swatch-use">BU brand, urgent</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#8aae8c;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Sage</div>
+          <div class="swatch-hex">#8aae8c</div>
+          <div class="swatch-use">Primary actions</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#547f58;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Sage Dark</div>
+          <div class="swatch-hex">#547f58</div>
+          <div class="swatch-use">Hover, links</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#e6b7bc;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Rose</div>
+          <div class="swatch-hex">#e6b7bc</div>
+          <div class="swatch-use">High urgency</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#d7b75f;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gold</div>
+          <div class="swatch-hex">#d7b75f</div>
+          <div class="swatch-use">Medium urgency, stars</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#6B9FD4;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Blue</div>
+          <div class="swatch-hex">#6B9FD4</div>
+          <div class="swatch-use">Copy link hover</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:#d9cdbf;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Border</div>
+          <div class="swatch-hex">#d9cdbf</div>
+          <div class="swatch-use">All card borders</div>
+        </div>
+      </div>
+
+      <div class="swatch">
+        <div class="swatch-chip" style="background:rgba(74,56,43,0.4);"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Ink Faint</div>
+          <div class="swatch-hex">rgba(74,56,43,.4)</div>
+          <div class="swatch-use">Completed tasks</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. Typography -->
+  <div class="section">
+    <div class="section-title">Typography</div>
+    <table class="type-table">
+      <thead>
+        <tr>
+          <th style="width:22%">Font</th>
+          <th style="width:20%">Role</th>
+          <th style="width:30%">Sample</th>
+          <th>Used For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ovo</strong><br><span style="color:var(--ink-mid); font-size:11px;">Serif</span></td>
+          <td>Structural display</td>
+          <td><span class="type-sample" style="font-family:'Ovo',serif;">Event Planner</span></td>
+          <td style="font-size:11px; color:var(--ink-mid);">Hero H1, section headings, progress counter, print masthead</td>
+        </tr>
+        <tr>
+          <td><strong>Caveat</strong><br><span style="color:var(--ink-mid); font-size:11px;">Handwritten</span></td>
+          <td>Accent headings</td>
+          <td><span class="type-sample" style="font-family:'Caveat',cursive; font-size:24px;">Your Checklist</span></td>
+          <td style="font-size:11px; color:var(--ink-mid);">Page titles, week card labels, nav links, about heading, doc section labels</td>
+        </tr>
+        <tr>
+          <td><strong>Gaegu</strong><br><span style="color:var(--ink-mid); font-size:11px;">Casual body</span></td>
+          <td>Body &amp; UI text</td>
+          <td><span class="type-sample" style="font-family:'Gaegu',cursive; font-size:19px;">Answer a few questions.</span></td>
+          <td style="font-size:11px; color:var(--ink-mid);">Body copy, chat bubbles, button labels, task titles, eyebrow badges</td>
+        </tr>
+        <tr>
+          <td><strong>Mulish</strong><br><span style="color:var(--ink-mid); font-size:11px;">Sans-serif</span></td>
+          <td>Functional UI</td>
+          <td><span class="type-sample" style="font-family:'Mulish',sans-serif; font-size:13px; letter-spacing:1px; text-transform:uppercase; font-weight:700;">EVENT NAME</span></td>
+          <td style="font-size:11px; color:var(--ink-mid);">Form labels, task notes, tags, metadata, percentages, print output</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. Components -->
+  <div class="section">
+    <div class="section-title">Components</div>
+    <div class="comp-grid">
+
+      <!-- Buttons -->
+      <div class="comp-card">
+        <div class="comp-name">Buttons</div>
+        <div class="comp-desc">Three variants: solid sage for primary CTAs, outline for secondary actions, scarlet-tinted outline for hover states on doc links.</div>
+        <div class="comp-preview" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <span class="btn-sage">Start →</span>
+          <span class="btn-outline">← Back</span>
+          <span class="btn-scarlet-outline">📄 Proposal</span>
+        </div>
+        <div class="comp-desc">Radius: 100px pill · Font: Gaegu · All transitions 0.2s ease</div>
+      </div>
+
+      <!-- Chat bubbles -->
+      <div class="comp-card">
+        <div class="comp-name">Chat Bubbles</div>
+        <div class="comp-desc">Bot messages use a white card; user replies use sage fill. Asymmetric border-radius shows direction.</div>
+        <div class="comp-preview">
+          <div class="bubble-row">
+            <div class="av av-bot">🗓</div>
+            <div class="bub bub-bot">What type of event?</div>
+          </div>
+          <div class="bubble-row" style="flex-direction:row-reverse;">
+            <div class="av av-usr">YOU</div>
+            <div class="bub bub-usr">A social event</div>
+          </div>
+        </div>
+        <div class="comp-desc">Bot: white card · border --border · radius 14 14 14 3px<br>User: sage fill · white text · radius 14 14 3 14px</div>
+      </div>
+
+      <!-- Week card -->
+      <div class="comp-card">
+        <div class="comp-name">Week Cards &amp; Tasks</div>
+        <div class="comp-desc">Each week is a card with a colored urgency stripe, a Caveat header, and interactive task rows with animated checkboxes.</div>
+        <div class="comp-preview">
+          <div class="mini-card">
+            <div class="mini-card-top">
+              <div class="mini-card-wk">Week 6 — 6 weeks out</div>
+            </div>
+            <div class="mini-task">
+              <div class="mini-cb done">✓</div>
+              <div class="mini-title done">Reserve your venue</div>
+            </div>
+            <div class="mini-task">
+              <div class="mini-cb"></div>
+              <div class="mini-title">Submit event request</div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-desc">Card radius: 26px · Checkbox: 16px, radius 5px · checked: sage fill + spring pop animation</div>
+      </div>
+
+      <!-- Urgency stripes -->
+      <div class="comp-card">
+        <div class="comp-name">Urgency Stripes</div>
+        <div class="comp-desc">A 4px left border on each week card signals time-sensitivity at a glance. Set via class on the card element.</div>
+        <div class="comp-preview">
+          <div class="urg-row">
+            <div class="urg-item"><div class="urg-stripe" style="background:#c81d1d;"></div>Critical — &lt;1 week (.urg-critical)</div>
+            <div class="urg-item"><div class="urg-stripe" style="background:#e6b7bc;"></div>High — 1–2 weeks (.urg-high)</div>
+            <div class="urg-item"><div class="urg-stripe" style="background:#d7b75f;"></div>Medium — 3–4 weeks (.urg-medium)</div>
+            <div class="urg-item"><div class="urg-stripe" style="background:#8aae8c;"></div>Low — 5+ weeks (.urg-low)</div>
+          </div>
+        </div>
+        <div class="comp-desc">Rendered as a CSS ::before pseudo-element on .card-top</div>
+      </div>
+
+      <!-- Tags -->
+      <div class="comp-card">
+        <div class="comp-name">Task Tags</div>
+        <div class="comp-desc">Pill labels categorize tasks by type. Appear below task notes; hidden in print output to save space.</div>
+        <div class="comp-preview">
+          <div class="tag-row">
+            <span class="tag tag-ev">event</span>
+            <span class="tag tag-cat">catering</span>
+            <span class="tag tag-pur">purchase</span>
+            <span class="tag tag-com">comms</span>
+          </div>
+        </div>
+        <div class="comp-desc">Font: Mulish 11px lowercase · radius 100px · each has unique tinted background + text color</div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="comp-card">
+        <div class="comp-name">Progress Bar</div>
+        <div class="comp-desc">Sticky at top of checklist page. Shows tasks done / total, a fill bar, and a percentage. Updates live as tasks are checked.</div>
+        <div class="comp-preview">
+          <div class="prog-wrap">
+            <div>
+              <div class="prog-num">8<span style="font-family:'Mulish'; font-size:12px; color:var(--ink-mid); font-weight:400;"> / 13</span></div>
+              <div style="font-size:11px; color:var(--ink-mid);">tasks complete</div>
+            </div>
+            <div style="flex:1;">
+              <div class="prog-track"><div class="prog-fill"></div></div>
+              <div style="font-size:11px; color:var(--ink-mid); text-align:right; margin-top:3px;">62%</div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-desc">Counter: Ovo serif 24px · Fill: gradient sage → #9dc4a0 · width transitions 0.5s cubic-bezier</div>
+      </div>
+
+      <!-- Star rating -->
+      <div class="comp-card">
+        <div class="comp-name">Star Rating</div>
+        <div class="comp-desc">Used on the Post-Event Evaluation page. Stars toggle on click and highlight gold. Value stored in a hidden input field.</div>
+        <div class="comp-preview">
+          <div class="stars">
+            <span class="star lit">★</span>
+            <span class="star lit">★</span>
+            <span class="star lit">★</span>
+            <span class="star lit">★</span>
+            <span class="star unlit">★</span>
+          </div>
+        </div>
+        <div class="comp-desc">Unlit: color --border · Lit: color --gold · Hover: scale(1.15) · 0.15s transition</div>
+      </div>
+
+      <!-- Nav -->
+      <div class="comp-card">
+        <div class="comp-name">Navigation Bar</div>
+        <div class="comp-desc">Fixed bottom bar with Home and About links.</div>
+        <div class="comp-preview">
+          <div class="nav-demo">
+            <span class="nav-link">Home</span>
+            <span class="nav-link active">About</span>
+          </div>
+        </div>
+        <div class="comp-desc">Height: 52px · border-top: 1.5px --border · Font: Caveat 16px · Active/hover: scarlet tint</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4. Motion -->
+  <div class="section">
+    <div class="section-title">Motion</div>
+    <div class="comp-card" style="border-radius:14px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px 24px; font-size:11.5px; color:var(--ink-mid); line-height:1.65;">
+        <div><strong style="color:var(--ink);">Page transitions</strong><br>opacity + translateY(12px) → 0 · 0.45s ease</div>
+        <div><strong style="color:var(--ink);">Card reveal</strong><br>opacity + translateY(18px) → 0 · 0.5s ease · staggered</div>
+        <div><strong style="color:var(--ink);">Checkbox pop</strong><br>scale 1→1.25→1 · 0.28s · spring on checkmark</div>
+        <div><strong style="color:var(--ink);">CTA hover</strong><br>translateY(-2px) · shadow expands · 0.22s</div>
+        <div><strong style="color:var(--ink);">Progress fill</strong><br>width · 0.5s cubic-bezier(0.4,0,0.2,1)</div>
+        <div><strong style="color:var(--ink);">Hero doodles</strong><br>translateY(-10px) rotate(4deg) · 4.5s loop</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

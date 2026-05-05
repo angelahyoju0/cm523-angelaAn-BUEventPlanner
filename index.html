@@ -4,23 +4,259 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- PUT A TITLE IN HERE -->
-    <title>This is the demo</title>
-    <!-- PUT A DESCRIPTION IN HERE -->
-    <meta name="description" content="describe content of the page here...." />
-    <!-- LINK TO NORMALIZE (FOR CONSISTENCY) -->
+    <title>For students, by students</title>
+    <meta name="description" content="A personalized, step-by-step event planning guide for Boston University student organizations. Answer a few questions and get a custom week-by-week checklist." />
     <link rel="stylesheet" href="styles/normalize.css" />
-    <!-- LINK TO ANY FRAMEWORK STYLES HERE-->
-    
-    <!-- LINK TO YOUR STYLES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Gaegu:wght@300;400;700&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Ovo&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/styles.css" />
-    <!-- LINK TO EXTERNAL JS LIBRARIES HERE -->
-    <!-- LINK TO YOUR JS HERE. NOTE THE DEFER ATTRIBUTE. -->
     <script src="scripts/scripts.js" defer></script>
   </head>
   <body>
-    <!-- YOUR HTML GOES HERE -->
 
-    <!-- YOUR EXTERNAL PLUG-IN MAY ASK YOU TO PUT A SCRIPT TAG HERE. -->
+    <!-- ── PAGE 1: HERO ── -->
+    <div class="page" id="heroPage">
+      <div class="hero-glow"></div>
+      <div class="hero-doodle hero-doodle-1">✦</div>
+      <div class="hero-doodle hero-doodle-2">♡</div>
+      <div class="hero-doodle hero-doodle-3">☁</div>
+      <div class="hero-doodle hero-doodle-4">✓</div>
+      <div class="hero-layout">
+        <div class="hero-body">
+          <div class="hero-badge">For students, by students</div>
+          <h1 class="hero-h1">BU <br><em>Event Planner</em></h1>
+          <p class="hero-lead">Answer a few quick questions and get a printable event checklist built around your timeline.</p>
+          <div class="hero-mini-note">3 questions • 1 minute • one clean plan</div>
+          <button class="hero-cta" onclick="startPlanning()">Start My Checklist <span aria-hidden="true">→</span></button>
+        </div>
+
+        <div class="hero-preview-card" aria-hidden="true">
+          <div class="preview-pin">✦</div>
+          <div class="preview-title">Event Day Prep</div>
+          <div class="preview-date">DATE ____ / ____ / ____</div>
+          <div class="preview-row checked"><span></span>Reserve room</div>
+          <div class="preview-row"><span></span>Submit event request</div>
+          <div class="preview-row"><span></span>Confirm budget</div>
+          <div class="preview-row"><span></span>Post graphics</div>
+          <div class="preview-box">Notes for tomorrow...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE 2: CHAT ── -->
+    <div class="page" id="chatPage">
+      <main class="wrap">
+        <div class="chat-page-header">
+          <div class="chat-page-eyebrow">BU Event Planner</div>
+          <div class="chat-page-title">Let's build your checklist.</div>
+        </div>
+        <div class="chat-stack" id="chatStack"></div>
+      </main>
+    </div>
+
+    <!-- ── PAGE 3: CHECKLIST ── -->
+    <div class="page" id="checklistPage">
+      <main class="wrap">
+
+        <div class="tl-top fi">
+          <div class="tl-eyebrow">Your Personalized Plan</div>
+          <div class="tl-heading" id="tlHeading">Event Checklist</div>
+          <div class="tl-sub" id="tlSub">Check off tasks as you complete them</div>
+        </div>
+
+        <div class="prog-bar-wrap fi">
+          <div class="prog-stat">
+            <div class="prog-big"><span id="doneN">0</span> <span>/ <span id="totN">0</span></span></div>
+            <div class="prog-label">tasks complete</div>
+          </div>
+          <div class="prog-track">
+            <div class="prog-track-bar"><div class="prog-fill" id="progFill"></div></div>
+            <div class="prog-pct" id="progPct">0%</div>
+          </div>
+        </div>
+
+        <div class="tl-print-top">
+          <button id="copyLinkBtn" class="btn-copy-link" onclick="copyProgressLink()">🔗 Save progress + Copy link to clipboard</button>
+          <button class="btn-print-list" onclick="printChecklist()">🖨 Print Checklist as PDF</button>
+        </div>
+
+        <div class="tl-cards" id="tlCards"></div>
+
+        <button class="restart-btn" onclick="restart()">↩ Start Over</button>
+
+      </main>
+    </div>
+
+    <!-- ── PAGE 4: CONGRATS ── -->
+    <div class="page" id="congratsPage">
+      <div class="confetti-container" id="confettiContainer"></div>
+      <div class="congrats-content">
+        <div class="done-check-circle">✓</div>
+        <div class="done-heading">You're all set.</div>
+        <div class="done-sub-text">Every task is complete. Your event is ready to happen.</div>
+        <div class="done-actions">
+          <button class="btn-back-list" onclick="showPage('checklistPage')">← Back to checklist</button>
+          <button class="btn-print-list" onclick="printChecklist()">🖨 Print Checklist as PDF</button>
+          <button class="btn-start-eval" onclick="showEval()">Start Post-Event Evaluation →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE 5: EVALUATION ── -->
+    <div class="page" id="evalPage">
+      <main class="wrap">
+
+        <div class="eval-header">
+          <div class="eval-eyebrow">Post-Event Evaluation</div>
+          <h2 class="eval-heading">How did it go?</h2>
+          <p class="eval-desc">Document what happened so your org can learn and improve next time. Print it out to keep on file.</p>
+        </div>
+
+        <div class="eval-form">
+
+          <div class="eval-group">
+            <div class="eval-group-label">Event Overview</div>
+            <div class="eval-row">
+              <div class="eval-field">
+                <label for="evalName">Event Name</label>
+                <input class="eval-input" type="text" id="evalName" placeholder="e.g. Spring Cultural Night">
+              </div>
+              <div class="eval-field">
+                <label for="evalDateHeld">Date Held</label>
+                <input class="eval-input" type="date" id="evalDateHeld">
+              </div>
+            </div>
+            <div class="eval-row">
+              <div class="eval-field">
+                <label for="evalExpected">Expected Attendance</label>
+                <input class="eval-input" type="number" id="evalExpected" placeholder="e.g. 150">
+              </div>
+              <div class="eval-field">
+                <label for="evalActual">Actual Attendance</label>
+                <input class="eval-input" type="number" id="evalActual" placeholder="e.g. 127">
+              </div>
+            </div>
+            <div class="eval-row">
+              <div class="eval-field">
+                <label for="evalTickets">Tickets Sold</label>
+                <input class="eval-input" type="number" id="evalTickets" placeholder="e.g. 100">
+              </div>
+              <div class="eval-field">
+                <label for="evalBudget">Revenue / Budget Spent</label>
+                <input class="eval-input" type="text" id="evalBudget" placeholder="e.g. $800 / $1,200 spent">
+              </div>
+            </div>
+          </div>
+
+          <div class="eval-group">
+            <div class="eval-group-label">Overall Rating</div>
+            <div class="star-row" id="starRow">
+              <span class="star" data-val="1" onclick="setRating(1)">★</span>
+              <span class="star" data-val="2" onclick="setRating(2)">★</span>
+              <span class="star" data-val="3" onclick="setRating(3)">★</span>
+              <span class="star" data-val="4" onclick="setRating(4)">★</span>
+              <span class="star" data-val="5" onclick="setRating(5)">★</span>
+            </div>
+            <input type="hidden" id="evalRating" value="0">
+          </div>
+
+          <div class="eval-group">
+            <div class="eval-group-label">Reflections</div>
+            <div class="eval-field-full">
+              <label for="evalWell">What went well?</label>
+              <textarea class="eval-textarea" id="evalWell" rows="4" placeholder="Highlight successes — great turnout, smooth logistics, positive feedback from attendees..."></textarea>
+            </div>
+            <div class="eval-field-full">
+              <label for="evalImprove">What could be improved?</label>
+              <textarea class="eval-textarea" id="evalImprove" rows="4" placeholder="Logistics issues, timing, communication gaps, things that fell through the cracks..."></textarea>
+            </div>
+            <div class="eval-field-full">
+              <label for="evalEngagement">Engagement highlights</label>
+              <textarea class="eval-textarea" id="evalEngagement" rows="3" placeholder="Social media reach, photos taken, press mentions, memorable moments..."></textarea>
+            </div>
+            <div class="eval-field-full">
+              <label for="evalNotes">Notes for next year</label>
+              <textarea class="eval-textarea" id="evalNotes" rows="4" placeholder="Vendor contacts to keep, things to start earlier, budget adjustments, ideas to carry forward..."></textarea>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="eval-print-wrap">
+          <button class="btn-print-eval" onclick="printEval()">🖨 Print Evaluation as PDF</button>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- ── PAGE 6: ABOUT ── -->
+    <div class="page" id="aboutPage">
+      <main class="wrap about-wrap">
+
+        <div class="about-header fi">
+          <div class="about-eyebrow">About This Project</div>
+          <h2 class="about-heading">Hi, fellow BU student leader!</h2>
+        </div>
+
+        <div class="about-body fi">
+          <div class="about-photo-col">
+            <div class="about-photo-frame">
+              <img src="images/angela.jpg" alt="Angela An" class="about-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="about-photo-placeholder" style="display:none">📸</div>
+            </div>
+            <div class="about-photo-name">Angela An</div>
+            <div class="about-photo-title">COM '26 · Media Science<br>Innovation &amp; Entrepreneurship</div>
+            <a class="about-linkedin-btn" href="https://www.linkedin.com/in/angelahyoju/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+
+          <div class="about-text-col">
+            <p class="about-p">My name is <strong>Angela An</strong>—a fourth-year Media Science student at BU's College of Communication, with a minor in Innovation and Entrepreneurship at Questrom. I've spent my time here leading student organizations including the Asian Student Union and the legislative branch of Student Government, which means I've planned a lot of events.</p>
+            <p class="about-p">And I know firsthand how confusing that process can be.</p>
+            <p class="about-p">BU's official documentation on event planning, purchasing, contracting, and catering exemptions is dense, policy-heavy, and updated every year. For first-time organizers or newly elected e-board members, it's a lot to absorb on top of everything else.</p>
+            <p class="about-p">This tool fixes that. Answer a few quick questions about your event, and it generates a personalized, step-by-step checklist showing only the steps that apply to your specific situation—no policy-reading required.</p>
+            <p class="about-p">Refer to the project documentation below to learn more.</p>
+          </div>
+        </div>
+
+        <div class="about-docs fi">
+          <div class="about-docs-label">Project Documentation</div>
+          <div class="about-docs-grid">
+            <a class="about-doc-btn" href="https://docs.google.com/document/d/1Jcji20Y2kdb9txR0RthKkqOEAtSCIrXood0s7AmtLHc/edit?usp=sharing" target="_blank" rel="noopener">
+              <span class="about-doc-icon">📄</span>
+              <span>Project Proposal</span>
+            </a>
+            <a class="about-doc-btn" href="https://fog-pencil-98055144.figma.site/" target="_blank" rel="noopener">
+              <span class="about-doc-icon">🖊</span>
+              <span>Wireframe</span>
+            </a>
+            <a class="about-doc-btn" href="design-doc.html" target="_blank" rel="noopener">
+              <span class="about-doc-icon">🎨</span>
+              <span>Design Documentation</span>
+            </a>
+            <a class="about-doc-btn" href="https://docs.google.com/document/d/15aPhm34hfapE4HyY939ith536X3rTSNTsTdIq3_NzM4/edit?usp=sharing" target="_blank" rel="noopener">
+              <span class="about-doc-icon">🔍</span>
+              <span>UX Report</span>
+            </a>
+            <a class="about-doc-btn" href="https://docs.google.com/document/d/1PgKLrVdBKZc0U5P72Thz7fjIUlS0LQdghzdBRBzk8gg/edit?usp=sharing" target="_blank" rel="noopener">
+              <span class="about-doc-icon">📚</span>
+              <span>Citation</span>
+            </a>
+          </div>
+        </div>
+
+        <button class="restart-btn" onclick="showPage('heroPage')">← Back to Home</button>
+
+      </main>
+    </div>
+
+    <!-- ── FOOTER NAV ── -->
+    <nav class="site-nav" id="siteNav">
+      <div class="nav-inner">
+        <a class="nav-link" href="#" onclick="showPage('heroPage'); return false;">Home</a>
+        <a class="nav-link" href="#" onclick="showPage('aboutPage'); return false;">About</a>
+      </div>
+    </nav>
+
   </body>
 </html>
